@@ -1,0 +1,33 @@
+version: "3.8"
+
+services:
+  web:
+    build: ./services/web
+    volumes:
+      - ./services/web:/usr/src/app/
+    env_file:
+      - ./.env
+    command: python manage.py run -h 0.0.0.0
+    ports:
+      - 5000:5000
+    networks:
+      - web_network
+    entrypoint: ./entrypoint.sh
+  db:
+    image: postgres:14-bullseye
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_USER=docker_flask
+      - POSTGRES_PASSWORD=docker_flask
+      - POSTGRES_db=docker_flask
+    networks:
+      - web_network
+
+volumes:
+  postgres_data:
+
+networks:
+  web_network:
+    name: docker_flask
+    driver: bridge

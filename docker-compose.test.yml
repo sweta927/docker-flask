@@ -1,0 +1,14 @@
+version: "3.8"
+
+services:
+  testing:
+    build: ./services/web/tests/
+    env_file:
+      - ./services/web/tests/.env
+    networks:
+      - web_network
+    entrypoint: pytest
+
+networks:
+  web_network:
+    name: docker_flask
